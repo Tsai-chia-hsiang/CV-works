@@ -73,7 +73,7 @@ Using ```np.linalg.qr()``` to decompose the inverse of upper 3x3 part of __P__ (
 
 ### Average projection Error:
 
-$$\text{project}=\begin{bmatrix}
+$$\text{proj2DH}=\begin{bmatrix}
     \cdots & \cdots & \cdots \\ 
     x_h & y_h & z_h \\ 
     \cdots & \cdots & \cdots \\
