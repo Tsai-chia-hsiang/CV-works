@@ -91,7 +91,7 @@ $$\begin{bmatrix}
 
 Then calculate MSE between groundtruth 
 
-$$\begin{bmatrix}
+$$\text{MSE}\left(\begin{bmatrix}
 \cdots & \cdots \\ 
 \frac{x_h}{z_h} & \frac{y_h}{z_h} \\ 
 \cdots & \cdots \\ 
@@ -99,6 +99,6 @@ $$\begin{bmatrix}
     \cdots & \cdots \\ 
     \hat{x} & \hat{y} \\ 
     \cdots & \cdots \\
-\end{bmatrix}$$
+\end{bmatrix}\right)$$
 
 Average projection error for sample data :  __0.427089376559275__
