@@ -1,0 +1,224 @@
+{
+    "HistEQ": {
+        "aloe.jpg": [
+            [
+                "origin",
+                "result\\origin\\aloe.jpg"
+            ],
+            [
+                "HistEQ on RGB",
+                "result\\HistEQ_RGB\\aloe.jpg"
+            ],
+            [
+                "HistEQ on I of HSI",
+                "result\\HistEQ_I\\aloe.jpg"
+            ],
+            [
+                "HistEQ on L* of L*a*b*",
+                "result\\HistEQ_Lab\\aloe.jpg"
+            ]
+        ],
+        "church.jpg": [
+            [
+                "origin",
+                "result\\origin\\church.jpg"
+            ],
+            [
+                "HistEQ on RGB",
+                "result\\HistEQ_RGB\\church.jpg"
+            ],
+            [
+                "HistEQ on I of HSI",
+                "result\\HistEQ_I\\church.jpg"
+            ],
+            [
+                "HistEQ on L* of L*a*b*",
+                "result\\HistEQ_Lab\\church.jpg"
+            ]
+        ],
+        "house.jpg": [
+            [
+                "origin",
+                "result\\origin\\house.jpg"
+            ],
+            [
+                "HistEQ on RGB",
+                "result\\HistEQ_RGB\\house.jpg"
+            ],
+            [
+                "HistEQ on I of HSI",
+                "result\\HistEQ_I\\house.jpg"
+            ],
+            [
+                "HistEQ on L* of L*a*b*",
+                "result\\HistEQ_Lab\\house.jpg"
+            ]
+        ],
+        "kitchen.jpg": [
+            [
+                "origin",
+                "result\\origin\\kitchen.jpg"
+            ],
+            [
+                "HistEQ on RGB",
+                "result\\HistEQ_RGB\\kitchen.jpg"
+            ],
+            [
+                "HistEQ on I of HSI",
+                "result\\HistEQ_I\\kitchen.jpg"
+            ],
+            [
+                "HistEQ on L* of L*a*b*",
+                "result\\HistEQ_Lab\\kitchen.jpg"
+            ]
+        ]
+    },
+    "sharpening": {
+        "aloe.jpg": [
+            [
+                "origin",
+                "result\\origin\\aloe.jpg"
+            ],
+            [
+                "sharpening on RGB",
+                "result\\RGBsharpening\\aloe.jpg"
+            ],
+            [
+                "HistEQ on I of HSI",
+                "result\\HistEQ_I\\aloe.jpg"
+            ],
+            [
+                "sharpening on RGB & HistEQ on I of HSI",
+                "result\\HistEQ_N_sharp\\aloe.jpg"
+            ]
+        ],
+        "church.jpg": [
+            [
+                "origin",
+                "result\\origin\\church.jpg"
+            ],
+            [
+                "sharpening on RGB",
+                "result\\RGBsharpening\\church.jpg"
+            ],
+            [
+                "HistEQ on I of HSI",
+                "result\\HistEQ_I\\church.jpg"
+            ],
+            [
+                "sharpening on RGB & HistEQ on I of HSI",
+                "result\\HistEQ_N_sharp\\church.jpg"
+            ]
+        ],
+        "house.jpg": [
+            [
+                "origin",
+                "result\\origin\\house.jpg"
+            ],
+            [
+                "sharpening on RGB",
+                "result\\RGBsharpening\\house.jpg"
+            ],
+            [
+                "HistEQ on I of HSI",
+                "result\\HistEQ_I\\house.jpg"
+            ],
+            [
+                "sharpening on RGB & HistEQ on I of HSI",
+                "result\\HistEQ_N_sharp\\house.jpg"
+            ]
+        ],
+        "kitchen.jpg": [
+            [
+                "origin",
+                "result\\origin\\kitchen.jpg"
+            ],
+            [
+                "sharpening on RGB",
+                "result\\RGBsharpening\\kitchen.jpg"
+            ],
+            [
+                "HistEQ on I of HSI",
+                "result\\HistEQ_I\\kitchen.jpg"
+            ],
+            [
+                "sharpening on RGB & HistEQ on I of HSI",
+                "result\\HistEQ_N_sharp\\kitchen.jpg"
+            ]
+        ]
+    },
+    "Gamma": {
+        "aloe.jpg": [
+            [
+                "origin",
+                "result\\origin\\aloe.jpg"
+            ],
+            [
+                "Gamma correction on S of HSI",
+                "result\\Gamma\\aloe.jpg"
+            ],
+            [
+                "HistEQ on I of HSI",
+                "result\\HistEQ_I\\aloe.jpg"
+            ],
+            [
+                "HistEQ on I and Gamma on S of HSI",
+                "result\\HistEQ_I_Ga\\aloe.jpg"
+            ]
+        ],
+        "church.jpg": [
+            [
+                "origin",
+                "result\\origin\\church.jpg"
+            ],
+            [
+                "Gamma correction on S of HSI",
+                "result\\Gamma\\church.jpg"
+            ],
+            [
+                "HistEQ on I of HSI",
+                "result\\HistEQ_I\\church.jpg"
+            ],
+            [
+                "HistEQ on I and Gamma on S of HSI",
+                "result\\HistEQ_I_Ga\\church.jpg"
+            ]
+        ],
+        "house.jpg": [
+            [
+                "origin",
+                "result\\origin\\house.jpg"
+            ],
+            [
+                "Gamma correction on S of HSI",
+                "result\\Gamma\\house.jpg"
+            ],
+            [
+                "HistEQ on I of HSI",
+                "result\\HistEQ_I\\house.jpg"
+            ],
+            [
+                "HistEQ on I and Gamma on S of HSI",
+                "result\\HistEQ_I_Ga\\house.jpg"
+            ]
+        ],
+        "kitchen.jpg": [
+            [
+                "origin",
+                "result\\origin\\kitchen.jpg"
+            ],
+            [
+                "Gamma correction on S of HSI",
+                "result\\Gamma\\kitchen.jpg"
+            ],
+            [
+                "HistEQ on I of HSI",
+                "result\\HistEQ_I\\kitchen.jpg"
+            ],
+            [
+                "HistEQ on I and Gamma on S of HSI",
+                "result\\HistEQ_I_Ga\\kitchen.jpg"
+            ]
+        ]
+    }
+}
