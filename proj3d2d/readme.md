@@ -32,8 +32,14 @@ $$A_{2N\times 12} = \begin{bmatrix}
     \end{bmatrix}$$
 
 Approximate $P$ by optimizing the problem :\
-   $\underset{P}{\textbf{argmin}}||(A^TA)P-0||_2,\text{s.t }P^TP=1$ 
-- Letting $P$ be the eigen vector corresponding to minimal eigen value $\lambda$, we minmize the objective function to $\lambda$.
+   $\underset{P}{\textbf{argmin}}||AP-0||_2,\text{s.t }P^TP=1$ 
+
+$||AP-0||_2 = (AP)^T(AP) = P^TA^TAP= P^TSP$
+
+- Largrange multiplier : $\underset{P}{\textbf{argmin }}P^TSP - \lambda (P^TP)$
+
+    $\frac{\partial (P^TSP - \lambda (P^TP))}{\partial P} = 0\Rightarrow 2SP-2\lambda P = 0 \Rightarrow SP=\lambda P, (A^TA)P = \lambda P$
+- Letting $P$ be the eigen vector of $A^TA$ corresponding to minimal eigen value $\lambda$, we minmize the objective function to $\lambda$.
     
 By using ```eigenvalues, eigenvectors = np.linalg.eig(A.T@A)``` to find eigen value and eigen vector for $A^TA$.
 
@@ -74,11 +80,12 @@ $$\text{project}_{h,N \times 3} = \begin{bmatrix}
 \end{bmatrix} = P_{3 \times 4}\times X_{N\times (3+1)}^T$$
 
 Translate back from homogeneous coordinate system to cartesian coordinate system, divided by the last element for each sample :
-$\begin{bmatrix}
+
+$$\begin{bmatrix}
 \cdots & \cdots \\ 
 \frac{x_h}{z_h} & \frac{y_h}{z_h} \\ 
 \cdots & \cdots \\ 
-\end{bmatrix}$
+\end{bmatrix}$$
 
 Then calculate MSE between groundtruth 
 
