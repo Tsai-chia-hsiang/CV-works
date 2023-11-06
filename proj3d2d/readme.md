@@ -9,9 +9,11 @@
 ### Projection matrix:
 
 3D pair : 
+
 $$\begin{bmatrix}\cdots & \cdots & \cdots \\ X_i & Y_i & Z_i \\ \cdots & \cdots & \cdots \end{bmatrix}_{N\times 3}$$
 
 2D pair : 
+
 $$\begin{bmatrix} \cdots & \cdots \\ x_i & y_i \\ \cdots & \cdots \end{bmatrix}_{N\times 2}$$
 
 $$A_{2N\times 12} = \begin{bmatrix}
@@ -32,6 +34,7 @@ Find minmal eigen value 's position using ```np.argmin(eigenvalues)``` and selec
 Finally, reshape $P$ to $3 \times 4$ to get projection matrix __P__.
 
 ###  calibration matrix (C), Rotation matrix (Rotation) and translation matrix (T)
+
 $$P=C \times \left[\begin{array}{c|c}
     \text{Rotation} & T
 \end{array}\right]=\left[\begin{array}{c|c}
@@ -55,11 +58,12 @@ Using ```np.linalg.qr()``` to decompose the inverse of upper 3x3 part of __P__ (
 
 
 ### Average projection Error:
-$\text{project}_{h,N \times 3} = \begin{bmatrix}
+
+$$\text{project}_{h,N \times 3} = \begin{bmatrix}
     \cdots & \cdots & \cdots \\ 
     x_h & y_h & z_h \\ 
     \cdots & \cdots & \cdots \\
-\end{bmatrix} = P_{3 \times 4}\times X_{N\times (3+1)}^T$
+\end{bmatrix} = P_{3 \times 4}\times X_{N\times (3+1)}^T$$
 
 Translate back from homogeneous coordinate system to cartesian coordinate system, divided by the last element for each sample :
 $\begin{bmatrix}
@@ -68,7 +72,9 @@ $\begin{bmatrix}
 \cdots & \cdots \\ 
 \end{bmatrix}$
 
-Then calculate MSE between groundtruth $\begin{bmatrix}
+Then calculate MSE between groundtruth 
+
+$$\begin{bmatrix}
 \cdots & \cdots \\ 
 \frac{x_h}{z_h} & \frac{y_h}{z_h} \\ 
 \cdots & \cdots \\ 
@@ -76,6 +82,6 @@ Then calculate MSE between groundtruth $\begin{bmatrix}
     \cdots & \cdots \\ 
     \hat{x} & \hat{y} \\ 
     \cdots & \cdots \\
-\end{bmatrix}$
+\end{bmatrix}$$
 
 Average projection error for sample data :  __0.427089376559275__
