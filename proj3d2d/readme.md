@@ -10,11 +10,19 @@
 
 3D pair : 
 
-$$\begin{bmatrix}\cdots & \cdots & \cdots \\ X_i & Y_i & Z_i \\ \cdots & \cdots & \cdots \end{bmatrix}_{N\times 3}$$
+$$\begin{bmatrix}
+\cdots & \cdots & \cdots \\ 
+X_i & Y_i & Z_i \\ 
+\cdots & \cdots & \cdots 
+\end{bmatrix}_{N\times 3}$$
 
 2D pair : 
 
-$$\begin{bmatrix} \cdots & \cdots \\ x_i & y_i \\ \cdots & \cdots \end{bmatrix}_{N\times 2}$$
+$$\begin{bmatrix} 
+\cdots & \cdots \\ 
+x_i & y_i \\ 
+\cdots & \cdots 
+\end{bmatrix}_{N\times 2}$$
 
 $$A_{2N\times 12} = \begin{bmatrix}
         \cdots & \cdots & \cdots & \cdots & \cdots & \cdots & \cdots & \cdots & \cdots & \cdots & \cdots & \cdots  \\
