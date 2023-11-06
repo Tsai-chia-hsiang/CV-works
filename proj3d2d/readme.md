@@ -8,14 +8,18 @@
 ## Method :
 ### Projection matrix:
 
-3D pair : $\begin{bmatrix}\cdots & \cdots & \cdots \\ X_i & Y_i & Z_i \\ \cdots & \cdots & \cdots \end{bmatrix}_{N\times 3}$ ,2D pair : $\begin{bmatrix} \cdots & \cdots \\ x_i & y_i \\ \cdots & \cdots \end{bmatrix}_{N\times 2}$ 
+3D pair : 
+$$\begin{bmatrix}\cdots & \cdots & \cdots \\ X_i & Y_i & Z_i \\ \cdots & \cdots & \cdots \end{bmatrix}_{N\times 3}$$
 
-$A_{2N\times 12} = \begin{bmatrix}
+2D pair : 
+$$\begin{bmatrix} \cdots & \cdots \\ x_i & y_i \\ \cdots & \cdots \end{bmatrix}_{N\times 2}$$
+
+$$A_{2N\times 12} = \begin{bmatrix}
         \cdots & \cdots & \cdots & \cdots & \cdots & \cdots & \cdots & \cdots & \cdots & \cdots & \cdots & \cdots  \\
         X_i & Y_i & Z_i & 1 & 0 & 0 & 0 & 0 &-x_iX_i & -x_iY_i & -x_iZ_i & -x_i \\ 
         0 & 0 & 0 & 0 & X_i & Y_i & Z_i & 1 &-y_iX_i & -y_iY_i & -y_iZ_i & -y_i \\ 
         \cdots & \cdots & \cdots & \cdots & \cdots & \cdots & \cdots & \cdots & \cdots & \cdots & \cdots & \cdots 
-    \end{bmatrix}$
+    \end{bmatrix}$$
 
 Approximate $P$ by optimizing the problem :\
    $\underset{P}{\textbf{argmin}}||(A^TA)P-0||_2,\text{s.t }P^TP=1$ 
