@@ -39,11 +39,11 @@ $||AP-0||_2 = (AP)^T(AP) = P^TA^TAP= P^TSP$
 - Largrange multiplier : $\underset{P}{\textbf{argmin }}P^TSP - \lambda (P^TP)$
 
     $\frac{\partial (P^TSP - \lambda (P^TP))}{\partial P} = 0\Rightarrow 2SP-2\lambda P = 0 \Rightarrow SP=\lambda P, (A^TA)P = \lambda P$
-- Letting $P$ be the eigen vector of $A^TA$ corresponding to minimal eigen value $\lambda$, we minmize the objective function to $\lambda$.
+- Letting $P$ be the eigen vector of $A^TA$ corresponding to minimal eigen value $\lambda$, we minimize the objective function to $\lambda$.
     
 By using ```eigenvalues, eigenvectors = np.linalg.eig(A.T@A)``` to find eigen value and eigen vector for $A^TA$.
 
-Find minmal eigen value 's position using ```np.argmin(eigenvalues)``` and selection that column from ```eigenvectors``` to get $P$.
+Find minimal eigen value 's position using ```np.argmin(eigenvalues)``` and selection that column from ```eigenvectors``` to get $P$.
 
 Finally, reshape $P$ to $3 \times 4$ to get projection matrix __P__.
 
