@@ -43,9 +43,9 @@ def Conv2D(img:np.ndarray, m:np.ndarray)->np.ndarray:
 
 
 sobelx = np.array(
-    [[-1,0,1],
-    [-2,0,2],
-    [-1,0,1]], 
+    [[1, 0, -1],
+    [2, 0, -2],
+    [1, 0, -1]],
     dtype=np.float64
 )
 sobely = sobelx.T
