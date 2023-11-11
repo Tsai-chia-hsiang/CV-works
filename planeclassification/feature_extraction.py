@@ -33,7 +33,7 @@ class Dataset():
     def __len__(self):
         return len(self.__datapathes)
 
-def Conv2D(img:np.ndarray, m:np.ndarray, debug=False)->np.ndarray:
+def Conv2D(img:np.ndarray, m:np.ndarray)->np.ndarray:
             
     def padding(img:np.ndarray, extnum=(1,1))->np.ndarray:
         padding_img = np.copy(img)
@@ -51,9 +51,7 @@ def Conv2D(img:np.ndarray, m:np.ndarray, debug=False)->np.ndarray:
     s = pimg.shape
     block_row_indices = np.arange(s[0]-(mask.shape[0]//2)*2).reshape(-1,1) + np.arange(mask.shape[0])
     block_col_indices = np.arange(s[1]-(mask.shape[1]//2)*2).reshape(-1,1) + np.arange(mask.shape[1]) 
-    if debug:
-        print(s)
-        print(block_row_indices)
+
     block_row = pimg[block_row_indices,:]
     blocks = np.transpose(block_row, (0,2,1))[:, block_col_indices]
     blocks = np.transpose(blocks, (0,1,3,2))
@@ -68,8 +66,10 @@ sobelx = np.array(
 sobely = sobelx.T
 
 def img_gradient(img:np.ndarray)->tuple:
+    
     gx = np.clip(Conv2D(img, sobelx/8), 0, 255)
     gy = np.clip(Conv2D(img , sobely/8), 0, 255)
+    
     return np.rad2deg(np.arctan2(gy, gx)), (gx**2+gy**2)**0.5
 
 def color_histogram(img:np.ndarray)->np.ndarray:
@@ -166,26 +166,28 @@ def makedir(p:os.PathLike)->os.PathLike:
 
 def main():
     
-    data = Dataset(root=osp.join("data", "train"))
-    result = makedir(osp.join("result"))
-    features = makedir(osp.join(result, "features"))
-    colorhis_dir = makedir(osp.join(features, "colorhistogram"))
-    hog_dir = makedir(osp.join(features, "HoG"))
-    gabor_dir =  makedir(osp.join(features, "Gabor"))
-    gabor_sample_count = [0]*len(data.classes)
-    for label, imgpath in tqdm(data):
+    train_data = Dataset(root=osp.join("data", "train"))
+    train_feature_dir = makedir(osp.join(makedir("features"), "train"))
+    colorhis_dir = makedir(osp.join(train_feature_dir, "colorhistogram"))
+    hog_dir = makedir(osp.join(train_feature_dir, "HoG"))
+    gabor_dir =  makedir(osp.join(train_feature_dir, "Gabor"))
+
+    for label, imgpath in tqdm(train_data):
 
         name = osp.split(imgpath)[-1]
         
         img = cv2.cvtColor(cv2.imread(imgpath), cv2.COLOR_BGR2RGB)
         gimg = cv2.cvtColor(cv2.imread(imgpath), cv2.COLOR_BGR2GRAY)
 
-        d_color_hist = makedir(osp.join(colorhis_dir,data.classes[label]))
+        d_color_hist = makedir(osp.join(colorhis_dir,train_data.classes[label]))
         np.save(osp.join(d_color_hist,name[:-4]), color_histogram(img=img))
 
-        d_hog = makedir(osp.join(hog_dir,data.classes[label]))
+        d_hog = makedir(osp.join(hog_dir,train_data.classes[label]))
         np.save(osp.join(d_hog,name[:-4]),HoG(gimg))
 
+        d_gabor = makedir(osp.join(gabor_dir,train_data.classes[label]))
+        gaborimg = np.clip(Conv2D(gimg, gabor_kernel)*255, 0, 255).astype(np.uint8)
+        cv2.imwrite(osp.join(d_gabor ,name), gaborimg)
 
 
 if __name__ == "__main__":
