@@ -1,7 +1,7 @@
 import numpy as np
 
 def Conv2D(img:np.ndarray, m:np.ndarray)->np.ndarray:
-        
+            
     def padding(img:np.ndarray, extnum=(1,1))->np.ndarray:
         padding_img = np.copy(img)
         padding_aix = [np.vstack, np.hstack]
@@ -12,19 +12,18 @@ def Conv2D(img:np.ndarray, m:np.ndarray)->np.ndarray:
                 p = p.T
             padding_img = m((p, padding_img, p))
         return padding_img
-   
+
     mask = np.flip(m, (0,1))
-    pimg = padding(
-        img=img, 
-        extnum=(mask.shape[0]//2,mask.shape[1]//2)
-    ) 
+    pimg = padding(img=img.astype(np.float64), extnum=(mask.shape[0]//2,mask.shape[1]//2))
     s = pimg.shape
-    block_row_indices = np.arange(s[0]-2).reshape(-1,1) + np.arange(mask.shape[0])
-    block_col_indices = np.arange(s[1]-2).reshape(-1,1) + np.arange(mask.shape[1]) 
+    block_row_indices = np.arange(s[0]-(mask.shape[0]//2)*2).reshape(-1,1) + np.arange(mask.shape[0])
+    block_col_indices = np.arange(s[1]-(mask.shape[1]//2)*2).reshape(-1,1) + np.arange(mask.shape[1]) 
+  
     block_row = pimg[block_row_indices,:]
     blocks = np.transpose(block_row, (0,2,1))[:, block_col_indices]
     blocks = np.transpose(blocks, (0,1,3,2))
     return ((blocks*mask).sum(axis=(2,3)))
+
 
 
 class Sharpener():
