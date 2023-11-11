@@ -1,76 +1,10 @@
 import os
 import os.path as osp
+from dataset import walkdir, Dataset
 import numpy as np
 import cv2
 from tqdm import tqdm
-import matplotlib.pyplot as plt
-
-class Dataset():
-    def __init__(self, root :os.PathLike, shuffle:bool=False) -> None:
-        
-        self.classes, self.__datapathes = Dataset.walk_data_root(root=root)
-
-    @staticmethod
-    def walk_data_root(root:os.PathLike)->tuple:
-        
-        def walkdir(root:os.PathLike)->list:
-            ret = []
-            for r,_,fs in os.walk(root):
-                for f in fs:
-                    ret.append(osp.join(r, f))
-            return ret
-        
-        c = [c.name for c in os.scandir(root)]
-        ret = []
-        for ciid, ci in enumerate(c):
-            class_dir = osp.join(root, ci)
-            x = walkdir(root= class_dir)
-            ret += [(ciid, xi) for xi in x]
-        return c, ret
-
-    def __getitem__(self, i):
-        return self.__datapathes[i]
-    def __len__(self):
-        return len(self.__datapathes)
-
-def Conv2D(img:np.ndarray, m:np.ndarray)->np.ndarray:
-            
-    def padding(img:np.ndarray, extnum=(1,1))->np.ndarray:
-        padding_img = np.copy(img)
-        padding_aix = [np.vstack, np.hstack]
-        for i, m in enumerate(padding_aix):
-            s = padding_img.shape[1-i]
-            p = np.zeros((extnum[0],s))
-            if i%2 == 1:
-                p = p.T
-            padding_img = m((p, padding_img, p))
-        return padding_img
-
-    mask = np.flip(m, (0,1))
-    pimg = padding(img=img.astype(np.float64), extnum=(mask.shape[0]//2,mask.shape[1]//2))
-    s = pimg.shape
-    block_row_indices = np.arange(s[0]-(mask.shape[0]//2)*2).reshape(-1,1) + np.arange(mask.shape[0])
-    block_col_indices = np.arange(s[1]-(mask.shape[1]//2)*2).reshape(-1,1) + np.arange(mask.shape[1]) 
-
-    block_row = pimg[block_row_indices,:]
-    blocks = np.transpose(block_row, (0,2,1))[:, block_col_indices]
-    blocks = np.transpose(blocks, (0,1,3,2))
-    return ((blocks*mask).sum(axis=(2,3)))
-
-sobelx = np.array(
-    [[1, 0, -1],
-    [2, 0, -2],
-    [1, 0, -1]],
-    dtype=np.float64
-)
-sobely = sobelx.T
-
-def img_gradient(img:np.ndarray)->tuple:
-    
-    gx = np.clip(Conv2D(img, sobelx/8), 0, 255)
-    gy = np.clip(Conv2D(img , sobely/8), 0, 255)
-    
-    return np.rad2deg(np.arctan2(gy, gx)), (gx**2+gy**2)**0.5
+from imageoperation import Conv2D, img_gradient
 
 def color_histogram(img:np.ndarray)->np.ndarray:
     return np.vstack(
@@ -164,31 +98,52 @@ def makedir(p:os.PathLike)->os.PathLike:
         os.mkdir(p)
     return p
 
+
+def extract(dset, saveroot:os.PathLike):
+    
+    colorhis_dir = makedir(osp.join(saveroot, "colorhistogram"))
+    hog_dir = makedir(osp.join(saveroot, "HoG"))
+    gabor_dir =  makedir(osp.join(saveroot, "Gabor"))
+
+    for di in tqdm(dset):
+        imgpath = di
+        label = None
+        class_name = ""
+        if isinstance(di, tuple):
+            label = di[0]
+            imgpath = label
+            class_name=dset._classes[label]
+        
+        name = osp.split(imgpath)[-1]
+        d_color_hist = makedir(osp.join(colorhis_dir,class_name)) if len(class_name) else colorhis_dir
+        d_gabor = makedir(osp.join(gabor_dir, class_name)) if len(class_name) else gabor_dir
+        d_hog = makedir(osp.join(hog_dir, class_name)) if len(class_name) else hog_dir
+        
+        img = cv2.cvtColor(cv2.imread(imgpath), cv2.COLOR_BGR2RGB)
+        gimg = cv2.cvtColor(cv2.imread(imgpath), cv2.COLOR_BGR2GRAY)
+        
+        np.save(
+            osp.join(d_color_hist,name[:-4]), 
+            color_histogram(img=img)
+        )
+        np.save(
+            osp.join(d_hog,name[:-4]),
+            HoG(gimg)
+        )
+        cv2.imwrite(
+            osp.join(d_gabor ,name), 
+            np.clip(Conv2D(gimg, gabor_kernel)*255, 0, 255).astype(np.uint8)
+        )
+
 def main():
     
     train_data = Dataset(root=osp.join("data", "train"))
     train_feature_dir = makedir(osp.join(makedir("features"), "train"))
-    colorhis_dir = makedir(osp.join(train_feature_dir, "colorhistogram"))
-    hog_dir = makedir(osp.join(train_feature_dir, "HoG"))
-    gabor_dir =  makedir(osp.join(train_feature_dir, "Gabor"))
+    extract(dset=train_data, saveroot=train_feature_dir)
 
-    for label, imgpath in tqdm(train_data):
-
-        name = osp.split(imgpath)[-1]
-        
-        img = cv2.cvtColor(cv2.imread(imgpath), cv2.COLOR_BGR2RGB)
-        gimg = cv2.cvtColor(cv2.imread(imgpath), cv2.COLOR_BGR2GRAY)
-
-        d_color_hist = makedir(osp.join(colorhis_dir,train_data.classes[label]))
-        np.save(osp.join(d_color_hist,name[:-4]), color_histogram(img=img))
-
-        d_hog = makedir(osp.join(hog_dir,train_data.classes[label]))
-        np.save(osp.join(d_hog,name[:-4]),HoG(gimg))
-
-        d_gabor = makedir(osp.join(gabor_dir,train_data.classes[label]))
-        gaborimg = np.clip(Conv2D(gimg, gabor_kernel)*255, 0, 255).astype(np.uint8)
-        cv2.imwrite(osp.join(d_gabor ,name), gaborimg)
-
+    test_data = walkdir(root=osp.join("data","test"))
+    test_feature_dir = makedir(osp.join(makedir("features2"), "test"))
+    extract(dset=test_data, saveroot=test_feature_dir)
 
 if __name__ == "__main__":
     main()
