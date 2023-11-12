@@ -1,10 +1,6 @@
-import os
-import os.path as osp
-from dataset import walkdir, Dataset
 import numpy as np
 import cv2
-from tqdm import tqdm
-from imageoperation import Conv2D, img_gradient
+from imageoperation import img_gradient, Conv2D
 
 def color_histogram(img:np.ndarray)->np.ndarray:
     return np.vstack(
@@ -71,79 +67,40 @@ def HoG(img_:np.ndarray)->np.ndarray:
     
     return generate_blocks(cells=cells)
 
-def Gabor_filter(size,sigma, omega, theta)->np.ndarray:
-    center = (size[0]//2, size[1]//2)
-    x,y = np.meshgrid(np.arange(0, size[0]),np.arange(0, size[1]))
-    x = x - center[0]
-    y = y -center[1]
-    N = (2*np.pi*sigma[0]*sigma[1])
-    xp = x*np.cos(theta)+y*np.sin(theta)
-    #yp = y*np.cos(theta)-x*np.sin(theta)
-    f = np.exp(-((x/sigma[0])**2 + (y/sigma[1])**2)/2)
-    real = np.cos(omega*(xp)+0)
-    K = (f*real)/N
-    return K
+class Gabor_Filter():
 
-gabor_kernel = np.flip(
-    Gabor_filter(
-        size=(15,15),sigma=(5,5), omega=2*np.pi/10, 
-        theta=np.pi/4
-    ),
-    (0,1)
-)
-
-
-def makedir(p:os.PathLike)->os.PathLike:
-    if not osp.exists(p):
-        os.mkdir(p)
-    return p
-
-
-def extract(dset, saveroot:os.PathLike):
+    def __init__(self, ksize:tuple=(11,11), sigma:float=1.5, Nangle:int=6, gamma:float=1, omega:float=2*np.pi/3) -> None:
     
-    colorhis_dir = makedir(osp.join(saveroot, "colorhistogram"))
-    hog_dir = makedir(osp.join(saveroot, "HoG"))
-    gabor_dir =  makedir(osp.join(saveroot, "Gabor"))
-
-    for di in tqdm(dset):
-        imgpath = di
-        label = None
-        class_name = ""
-        if isinstance(di, tuple):
-            label = di[0]
-            imgpath = label
-            class_name=dset._classes[label]
+        self.kernels = [ 
+            np.flip( 
+                Gabor_Filter.generate_gabor_filter(
+                    size=ksize,sigma=sigma, 
+                    omega=omega, theta=t,
+                    gamma=gamma
+                ),(0,1)
+            ) 
+            for t in np.arange(0,np.pi, np.pi/Nangle)
+        ]
         
-        name = osp.split(imgpath)[-1]
-        d_color_hist = makedir(osp.join(colorhis_dir,class_name)) if len(class_name) else colorhis_dir
-        d_gabor = makedir(osp.join(gabor_dir, class_name)) if len(class_name) else gabor_dir
-        d_hog = makedir(osp.join(hog_dir, class_name)) if len(class_name) else hog_dir
-        
-        img = cv2.cvtColor(cv2.imread(imgpath), cv2.COLOR_BGR2RGB)
-        gimg = cv2.cvtColor(cv2.imread(imgpath), cv2.COLOR_BGR2GRAY)
-        
-        np.save(
-            osp.join(d_color_hist,name[:-4]), 
-            color_histogram(img=img)
-        )
-        np.save(
-            osp.join(d_hog,name[:-4]),
-            HoG(gimg)
-        )
-        cv2.imwrite(
-            osp.join(d_gabor ,name), 
-            np.clip(Conv2D(gimg, gabor_kernel)*255, 0, 255).astype(np.uint8)
-        )
+    @staticmethod
+    def generate_gabor_filter(size,sigma, omega, theta, gamma=1)->np.ndarray:
+        center = (size[0]//2, size[1]//2)
+        x,y = np.meshgrid(np.arange(0, size[0]),np.arange(0, size[1]))
+        x = x - center[0]
+        y = y - center[1]
 
-def main():
-    
-    train_data = Dataset(root=osp.join("data", "train"))
-    train_feature_dir = makedir(osp.join(makedir("features"), "train"))
-    extract(dset=train_data, saveroot=train_feature_dir)
+        xp = x*np.cos(theta)+y*np.sin(theta)
+        yp = y*np.cos(theta)-x*np.sin(theta)
+        f = np.exp(-(xp**2 + yp**2 * gamma**2)/(2*sigma**2))
+        real = np.cos(omega*(xp))
+        K = (f*real)
+        K /= (np.sum(K**2)**0.5)
+        return K
 
-    test_data = walkdir(root=osp.join("data","test"))
-    test_feature_dir = makedir(osp.join(makedir("features2"), "test"))
-    extract(dset=test_data, saveroot=test_feature_dir)
+    def filt(self, img:np.ndarray)->np.ndarray:
 
-if __name__ == "__main__":
-    main()
+        I = np.zeros(img.shape)
+        for k in self.kernels:
+            #I = np.maximum(I, Conv2D(img, k))
+            I += Conv2D(img, k)
+        return I/I.max()*255
