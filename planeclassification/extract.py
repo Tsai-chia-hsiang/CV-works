@@ -59,7 +59,7 @@ def extract(dataset:Dataset|list, saveroot:os.PathLike):
             
             saveto = makedir(osp.join(saveroot,method))
             if isinstance(d, tuple):
-                saveto = makedir(osp.join(saveto, d[0]))
+                saveto = makedir(osp.join(saveto, dataset._classes[d[0]]))
 
             savename = osp.join(saveto, imgname) if method == "garbor" else osp.join(saveto, imgname[:-4])
             
