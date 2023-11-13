@@ -40,7 +40,6 @@ class __Feature_Extractor():
     def save(self, saveto:os.PathLike, obj:np.ndarray)->None:
         np.save(saveto, obj)
     
-
 class Color_Histogram(__Feature_Extractor):
     
     def __init__(self) -> None:
@@ -118,7 +117,6 @@ class HoG(__Feature_Extractor):
         
         return blocks
 
-
 class Gabor_Features_Extractor( __Feature_Extractor):
 
     def __init__(self, ksize:int=11, sigma:float=1.5, Nangle:int=6, gamma:float=1, omega:float=2*np.pi/3) -> None:
@@ -142,9 +140,3 @@ class Gabor_Features_Extractor( __Feature_Extractor):
         return I/I.max()*255
         #return I
     
-    def postprocess(self, img: np.ndarray) -> np.ndarray:
-        return np.clip(img, 0, 255).astype(np.uint8)
-
-    def save(self, saveto: os.PathLike, obj: np.ndarray) -> None:
-        cv2.imwrite(saveto, obj)
-
