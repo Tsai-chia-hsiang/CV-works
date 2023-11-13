@@ -25,3 +25,6 @@ e.g.
 - HoG : 
   - https://www.youtube.com/watch?v=5nZGnYPyKLU
   - https://hannibunny.github.io/orbook/features/HoGfeatures.html#normalization
+- SIFT:
+  - https://docs.opencv.org/4.x/da/df5/tutorial_py_sift_intro.html
+  - https://medium.com/@ibabin/an-overview-of-sift-69a8b42cd5da
