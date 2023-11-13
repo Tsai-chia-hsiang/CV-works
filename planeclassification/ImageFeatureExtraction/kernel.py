@@ -25,7 +25,7 @@ def gaussian_kernel(ksize:int,sigma:float|list)->np.ndarray|list:
     x, y = makegrid(ksize=ksize)
     
     def generate(s:float)->np.ndarray:
-        m = gaussian_numerator(x=x, y=y, sigma=s)/(2*np.pi*(sigma**2))
+        m = gaussian_numerator(x=x, y=y, sigma=s)/(2*np.pi*(s**2))
         return normalize_kernel(m)
 
     p = [sigma] if isinstance(sigma, float) else sigma
