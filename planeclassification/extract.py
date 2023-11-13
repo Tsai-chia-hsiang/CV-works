@@ -32,10 +32,10 @@ def extract(dataset:Dataset|list, saveroot:os.PathLike, extract_method:dict):
             saveto = makedir(osp.join(saveroot,method))
             if isinstance(d, tuple):
                 saveto = makedir(osp.join(saveto, dataset._classes[d[0]]))
-
-            savename = osp.join(saveto, imgname) if method == "gabor" else osp.join(saveto, imgname[:-4])
             
-            extract_method[method](I, need_return=False, saveto=savename)
+            extract_method[method](
+                I, need_return=False, saveto=osp.join(saveto, imgname[:-4])
+            )
     
 
 def main(method:dict):
