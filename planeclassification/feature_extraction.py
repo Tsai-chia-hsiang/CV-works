@@ -94,7 +94,7 @@ class Gabor_Filter():
         f = np.exp(-(xp**2 + yp**2 * gamma**2)/(2*sigma**2))
         real = np.cos(omega*(xp))
         K = (f*real)
-        K /= (np.sum(K**2)**0.5)
+        K /= np.sum(K)
         return K
 
     def filt(self, img:np.ndarray)->np.ndarray:
