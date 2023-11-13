@@ -25,7 +25,7 @@ def extract(dataset:Dataset|list, saveroot:os.PathLike, extract_method:dict):
         
         path = d if not isinstance(d, tuple) else d[1]
         imgname = osp.split(path)[-1]
-        I = cv2.imread(path)
+        I = cv2.cvtColor(cv2.imread(path), cv2.COLOR_BGR2RGB)
 
         for method in args.features:
     
