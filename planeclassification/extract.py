@@ -23,7 +23,7 @@ gaborfilter = Gabor_Filter(sigma=1.4,Nangle=12)
 
 
 feature_extraction_map = {
-    'garbor':{
+    'gabor':{
         'preprocess':lambda x:x,
         'function':gaborfilter.filt,
         'save':cv2.imwrite,
