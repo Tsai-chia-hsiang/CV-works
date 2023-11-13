@@ -47,7 +47,7 @@ class Color_Histogram(__Feature_Extractor):
         super().__init__()
     
     def extract(self, img: np.ndarray) -> np.ndarray:
-        return np.vstack(
+        return np.dstack(
             [
                 np.bincount(img[..., i].flatten(), minlength = 256) 
                 for i in range(img.shape[2])
