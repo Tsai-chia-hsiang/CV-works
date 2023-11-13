@@ -7,7 +7,7 @@ command : ```python extract.py --training_data /path/to/trainingdatafolder/ --te
 
 - --training_data/--testing_data : folder where training/testing data are at.
   - if you don't want to extract training data, it is optional argument and just don't pass it. 
-- -featuresL
+- -features
   - The extraction methods you want to apply.
   - a list, can pass multi method in a row.
   - currently support:
