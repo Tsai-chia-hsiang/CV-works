@@ -47,13 +47,12 @@ class Color_Histogram(__Feature_Extractor):
         super().__init__()
     
     def extract(self, img: np.ndarray) -> np.ndarray:
-        return np.dstack(
+        return np.vstack(
             [
                 np.bincount(img[..., i].flatten(), minlength = 256) 
                 for i in range(img.shape[2])
             ]
         )
-
 
 class HoG(__Feature_Extractor):
     
@@ -61,7 +60,7 @@ class HoG(__Feature_Extractor):
         super().__init__()
 
     def preprocess(self, img: np.ndarray) -> np.ndarray:
-        return self.to_gray(img=img)
+        return cv2.resize(self.to_gray(img=img), (64,128))
 
     def extract(self, img: np.ndarray) -> np.ndarray:
 
@@ -115,7 +114,7 @@ class HoG(__Feature_Extractor):
         for i in range(cells.shape[0] - w//2):
             for j in range(cells.shape[1] - w//2):
                 blocks[i,j] = cells[i:i+2,j:j+2].flatten()
-                blocks[i,j] /= (np.sum(blocks[i,j]**2))**0.5
+                blocks[i,j] /= (np.sum(blocks[i,j]**2))**0.5+1e-10
         
         return blocks
 
@@ -148,3 +147,4 @@ class Gabor_Features_Extractor( __Feature_Extractor):
 
     def save(self, saveto: os.PathLike, obj: np.ndarray) -> None:
         cv2.imwrite(saveto, obj)
+
