@@ -147,5 +147,4 @@ class Gabor_Features_Extractor( __Feature_Extractor):
         return np.clip(img, 0, 255).astype(np.uint8)
 
     def save(self, saveto: os.PathLike, obj: np.ndarray) -> None:
-        print(saveto)
         cv2.imwrite(saveto, obj)
