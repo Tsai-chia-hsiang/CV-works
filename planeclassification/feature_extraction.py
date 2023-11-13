@@ -69,7 +69,7 @@ def HoG(img_:np.ndarray)->np.ndarray:
 
 class Gabor_Filter():
 
-    def __init__(self, ksize:tuple=(11,11), sigma:float=1.5, Nangle:int=6, gamma:float=1, omega:float=2*np.pi/3) -> None:
+    def __init__(self, ksize:int=11, sigma:float=1.5, Nangle:int=6, gamma:float=1, omega:float=2*np.pi/3) -> None:
     
         self.kernels = [ 
             np.flip( 
@@ -83,19 +83,18 @@ class Gabor_Filter():
         ]
         
     @staticmethod
-    def generate_gabor_filter(size,sigma, omega, theta, gamma=1)->np.ndarray:
-        center = (size[0]//2, size[1]//2)
-        x,y = np.meshgrid(np.arange(0, size[0]),np.arange(0, size[1]))
-        x = x - center[0]
-        y = y - center[1]
+    def generate_gabor_filter(size:int ,sigma:float, omega:float, theta:float, gamma:float=1)->np.ndarray:
+        start = -(size-1)//2
+        end = -start
+        x, y = np.meshgrid(np.arange(start, end+1, 1),np.arange(start, end+1, 1))
 
         xp = x*np.cos(theta)+y*np.sin(theta)
         yp = y*np.cos(theta)-x*np.sin(theta)
         f = np.exp(-(xp**2 + yp**2 * gamma**2)/(2*sigma**2))
         real = np.cos(omega*(xp))
         K = (f*real)
-        K /= np.sum(K)
-        return K
+        
+        return K/np.sum(K)
 
     def filt(self, img:np.ndarray)->np.ndarray:
 
@@ -104,3 +103,4 @@ class Gabor_Filter():
             #I = np.maximum(I, Conv2D(img, k))
             I += Conv2D(img, k)
         return I/I.max()*255
+        #return I
