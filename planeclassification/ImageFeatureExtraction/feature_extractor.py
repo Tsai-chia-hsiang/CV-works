@@ -28,6 +28,15 @@ class __Feature_Extractor():
     def postprocess(self, img:np.ndarray)->np.ndarray:
         return img
     
+    def to_gray(self, img:np.ndarray)->np.ndarray:
+        match img.ndim:
+            case 2:
+                return img
+            case 3:
+                return cv2.cvtColor(img ,cv2.COLOR_RGB2GRAY)
+            case _:
+                raise ValueError('seens not an image ...')
+
     def save(self, saveto:os.PathLike, obj:np.ndarray)->None:
         np.save(saveto, obj)
     
@@ -46,10 +55,13 @@ class Color_Histogram(__Feature_Extractor):
         )
 
 
-class HoG_Feature_Extractor(__Feature_Extractor):
+class HoG(__Feature_Extractor):
     
     def __init__(self) -> None:
         super().__init__()
+
+    def preprocess(self, img: np.ndarray) -> np.ndarray:
+        return self.to_gray(img=img)
 
     def extract(self, img: np.ndarray) -> np.ndarray:
 
@@ -96,7 +108,7 @@ class HoG_Feature_Extractor(__Feature_Extractor):
             
         return cells
 
-    def __generate_blocks(cells:np.ndarray, w:int=2)->np.ndarray:
+    def __generate_blocks(self, cells:np.ndarray, w:int=2)->np.ndarray:
         
         blocks = np.zeros((cells.shape[0] - w//2, cells.shape[1] - w//2, cells.shape[2]*w*w))
         
@@ -120,14 +132,7 @@ class Gabor_Features_Extractor( __Feature_Extractor):
         ) 
     
     def preprocess(self, img: np.ndarray) -> np.ndarray:
-        
-        match img.ndim:
-            case 2:
-                return img
-            case 3:
-                return cv2.cvtColor(img ,cv2.COLOR_RGB2GRAY)
-            case _:
-                raise ValueError('seens not an image ...')
+        return self.to_gray(img=img)
 
     def extract(self, img: np.ndarray) -> np.ndarray:
         
@@ -142,4 +147,5 @@ class Gabor_Features_Extractor( __Feature_Extractor):
         return np.clip(img, 0, 255).astype(np.uint8)
 
     def save(self, saveto: os.PathLike, obj: np.ndarray) -> None:
+        print(saveto)
         cv2.imwrite(saveto, obj)
