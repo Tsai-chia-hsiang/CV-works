@@ -6,10 +6,11 @@ def walkdir(root:os.PathLike)->list:
     for r,_,fs in os.walk(root):
         for f in fs:
             ret.append(osp.join(r, f))
-        return ret
+    return ret
 
 
 class Dataset():
+
     def __init__(self, root :os.PathLike, shuffle:bool=False) -> None:
         
         self._classes, self._datapathes = Dataset.walk_data_root(root=root)
@@ -27,5 +28,6 @@ class Dataset():
 
     def __getitem__(self, i):
         return self._datapathes[i]
+    
     def __len__(self):
         return len(self._datapathes)
