@@ -3,7 +3,7 @@ import os.path as osp
 import argparse
 from tqdm import tqdm
 import cv2
-from dataset import walkdir, Dataset
+from dataset import Unlabel_Dataset, Labeled_Dataset, makedir, Dataset
 from ImageFeatureExtraction.feature_extractor import *
 
 parser = argparse.ArgumentParser()
@@ -13,13 +13,7 @@ parser.add_argument("-features",'--features', nargs='*', help="the method you wa
 parser.add_argument("--output",help="the directory for saving features", default=osp.join("features"))
 args = parser.parse_args()
 
-def makedir(p:os.PathLike)->os.PathLike:
-    if not osp.exists(p):
-        os.mkdir(p)
-    return p
-
-
-def extract(dataset:Dataset|list, saveroot:os.PathLike, extract_method:dict):
+def extract(dataset:Dataset, saveroot:os.PathLike, extract_method:dict):
     
     for d in tqdm(dataset):
         
@@ -43,7 +37,7 @@ def main(method:dict):
     if len(args.training_data):
 
         print(args.training_data)
-        training_data = Dataset(root=args.training_data)
+        training_data = Labeled_Dataset(root=args.training_data)
         training_feature_dir = makedir( osp.join(makedir(args.output), "train") )
         print(training_feature_dir)
 
@@ -56,7 +50,7 @@ def main(method:dict):
     if len(args.testing_data):
 
         print(args.testing_data)
-        testing_data = walkdir(root=args.testing_data)
+        testing_data = Unlabel_Dataset(root=args.testing_data)
         testing_feature_dir = makedir( osp.join(makedir(args.output), "test") )
         print(testing_feature_dir)
         extract(
