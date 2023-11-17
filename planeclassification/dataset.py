@@ -2,6 +2,7 @@ import os
 import os.path as osp
 import pandas as pd
 import numpy as np
+import cv2
 from tqdm import tqdm
 
 def walkdir(root:os.PathLike)->list:
@@ -26,7 +27,10 @@ def save_dict_as_csv(d:dict, path:os.PathLike):
     df = pd.DataFrame(d)
     df.to_csv(path, index=False)
 
+
+
 class Dataset():
+
     def __init__(self, root:os.PathLike) -> None:
         self._datapathes = self.walk_data_root(root=root)
 
@@ -35,13 +39,12 @@ class Dataset():
     
     def __getitem__(self, i):
         return self._datapathes[i]
-    
+
     def __len__(self):
         return len(self._datapathes)
     
-    def load_all(self, read_method, **kwargs)->tuple:
-        raise NotImplementedError
-
+    def get_all(self)->list:
+        return self._datapathes.copy()
 
 class Unlabel_Dataset(Dataset):
 
@@ -51,17 +54,6 @@ class Unlabel_Dataset(Dataset):
     def walk_data_root(self, root:os.PathLike) -> list:
         return walkdir(root)
     
-    
-    def load_all(self, read_method, **kwargs)->tuple:
-        """
-        Warning ! will load all data into memory, please note 
-        the size of the dataset
-        """
-        print('loading data: ')
-        return self._datapathes.copy(), np.stack(
-            [read_method(p, **kwargs) for p in tqdm(self._datapathes)]
-        )
-
 class Labeled_Dataset(Dataset):
     
     def __init__(self, root: os.PathLike) -> None:
@@ -78,15 +70,34 @@ class Labeled_Dataset(Dataset):
             ret += [(ciid, xi) for xi in x]
         return c, ret
 
-    def load_all(self, read_method, **kwargs)->tuple:
-        """
-        Warning ! will load all data into memory, please note 
-        the size of the dataset
-        """
-        print("loading data : ")
+    def get_all(self)->tuple:
         labels, p = zip(*self._datapathes)
         labels = np.array(labels)
-        x = np.stack([read_method(pi, **kwargs) for pi in tqdm(p)])
-        return labels, x
+        return labels, list(p)
 
-    
+class Data_Loader():
+
+    def __init__(self) -> None:
+        self.ftype = [['.npy'], ['.png', '.jpg']]
+        self.input_method = [np.load, cv2.imread]
+
+    def load_single(self, p:os.PathLike, preprocess=lambda x:x, **kwargs)->np.ndarray:
+        ftype = p[p.rfind('.'):]
+        i = 0
+        for i, fi in enumerate(self.ftype):
+            if ftype in fi:
+                break
+        I = self.input_method[i](p)
+        return preprocess(I, **kwargs)   
+
+    def __call__(self, p:os.PathLike|list, preprocess=lambda x:x, **kwargs)->np.ndarray:
+
+        if isinstance(p, str):
+            return self.load_single(p, preprocess=preprocess, **kwargs)
+        
+        elif isinstance(p, list):
+            return np.stack(
+                [self.load_single(pi, preprocess=preprocess, **kwargs) for pi in tqdm(p)]
+            )
+        else:
+            raise ValueError
