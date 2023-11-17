@@ -21,10 +21,19 @@ e.g.
 ```python extract.py --training_data ./data/train/ -features gabor colorhistogram hog  --output ./features/```
 
 
+## classification :
+
+command : ```python classification.py --feature_root folder where features be saved at --rawdata the folder where raw data is at -using_features feature you want to use  --output /path/to/output```
+
+e.g. 
+```python classification.py --feature_root ./feature --rawdata ./data -using_features raw colorhistogram gabor hog  --output ./result```
+
+
+Kaggle submission :
+<img src="./result/score.png">
+
+
 ### Reference :
 - HoG : 
   - https://www.youtube.com/watch?v=5nZGnYPyKLU
   - https://hannibunny.github.io/orbook/features/HoGfeatures.html#normalization
-- SIFT:
-  - https://docs.opencv.org/4.x/da/df5/tutorial_py_sift_intro.html
-  - https://medium.com/@ibabin/an-overview-of-sift-69a8b42cd5da
