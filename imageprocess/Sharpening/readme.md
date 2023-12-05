@@ -34,16 +34,16 @@
 
 $$\begin{bmatrix}
     0 & -1 & 0 \\
-    -1 & -4 & -1 \\
+    -1 & 4 & -1 \\
     0 & -1 & 0 \\
 \end{bmatrix} , \begin{bmatrix}
     -1 & -1 & -1 \\
-    -1 & -8 & -1 \\
+    -1 & 8 & -1 \\
     -1 & -1 & -1 \\
 \end{bmatrix}$$
 
 - Sharpening
-$$f_{hb}(x,y) = Af(x,y)-\text{Laplacian}*f(x,y)$$
+$$f_{hb}(x,y) = Af(x,y)+\text{Laplacian}*f(x,y)$$
 
 化簡後，即為:
 
