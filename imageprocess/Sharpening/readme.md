@@ -57,7 +57,8 @@ $$ f_{hb} =  \begin{bmatrix}
     -1 & -1 & -1 \\
     -1 & A+8 & -1 \\
     -1 & -1 & -1 \\
-\end{bmatrix} * f(x,y)$$ (central of Laplacian is positive)
+\end{bmatrix} * f(x,y)$$ 
+(central of Laplacian is positive)
 
 我的程式碼即是依照化簡後的公式撰寫。 ( ```IMGSharpler.Laplacian_Sharpening()``` )
 
