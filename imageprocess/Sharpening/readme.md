@@ -72,13 +72,13 @@ $$ f_{hb} =  \begin{bmatrix}
 
 - __Blurry moon__ :
   
-    (c = -4) <img src = "result/blurry_moon/center_neg_4/A10blurry_moon.bmp" width="40%">
-    (c = -8) <img src = "result/blurry_moon/center_neg_8/A10blurry_moon.bmp" width="40%">
+    (c = 4) <img src = "result/blurry_moon/center_neg_4/A10blurry_moon.bmp" width="40%">
+    (c = 8) <img src = "result/blurry_moon/center_neg_8/A10blurry_moon.bmp" width="40%">
 
 - __skeleton_orig__ :
     
-    (c = -4) <img src="result/skeleton_orig/center_neg_4/A10skeleton_orig.bmp" width="40%"> 
-    (c = -8) <img src="result/skeleton_orig/center_neg_8/A10skeleton_orig.bmp" width="40%">
+    (c = 4) <img src="result/skeleton_orig/center_neg_4/A10skeleton_orig.bmp" width="40%"> 
+    (c = 8) <img src="result/skeleton_orig/center_neg_8/A10skeleton_orig.bmp" width="40%">
 
 ## High boosted filtering 
 使用 $A \geq 1$:
@@ -89,32 +89,32 @@ $$ f_{hb} =  \begin{bmatrix}
 
 - __blurry_moon__ :
 
-(c = -4)<img src="result/blurry_moon/center_neg_4/A15blurry_moon.bmp" width="40%"> (c = -8)<img src = "result/blurry_moon/center_neg_8/A15blurry_moon.bmp" width="40%">
+(c = 4)<img src="result/blurry_moon/center_neg_4/A15blurry_moon.bmp" width="40%"> (c = 8)<img src = "result/blurry_moon/center_neg_8/A15blurry_moon.bmp" width="40%">
 
 - __skeleton_moon__ :
 
-(c = -4)<img src="result/skeleton_orig/center_neg_4/A15skeleton_orig.bmp" width="40%">  (c = -8)<img src="result/skeleton_orig/center_neg_8/A15skeleton_orig.bmp" width="40%">
+(c = 4)<img src="result/skeleton_orig/center_neg_4/A15skeleton_orig.bmp" width="40%">  (c = 8)<img src="result/skeleton_orig/center_neg_8/A15skeleton_orig.bmp" width="40%">
 
 ### A = 1.7
 
 - __blurry_moon__ :
 
-(c = -4)<img src="result/blurry_moon/center_neg_4/A17blurry_moon.bmp" width="40%"> (c = -8)<img src = "result/blurry_moon/center_neg_8/A17blurry_moon.bmp" width="40%">
+(c = 4)<img src="result/blurry_moon/center_neg_4/A17blurry_moon.bmp" width="40%"> (c = 8)<img src = "result/blurry_moon/center_neg_8/A17blurry_moon.bmp" width="40%">
 
 - __skeleton_moon__ :
 
-(c = -4)<img src="result/skeleton_orig/center_neg_4/A17skeleton_orig.bmp" width="40%">  (c = -8)<img src="result/skeleton_orig/center_neg_8/A17skeleton_orig.bmp" width="40%">
+(c = 4)<img src="result/skeleton_orig/center_neg_4/A17skeleton_orig.bmp" width="40%">  (c = 8)<img src="result/skeleton_orig/center_neg_8/A17skeleton_orig.bmp" width="40%">
 
 
 #### A = 2
 
 - __blurry_moon__ :
 
-(c = -4)<img src="result/blurry_moon/center_neg_4/A20blurry_moon.bmp" width="40%"> (c = -8)<img src = "result/blurry_moon/center_neg_8/A20blurry_moon.bmp" width="40%">
+(c = 4)<img src="result/blurry_moon/center_neg_4/A20blurry_moon.bmp" width="40%"> (c = 8)<img src = "result/blurry_moon/center_neg_8/A20blurry_moon.bmp" width="40%">
 
 - __skeleton_moon__ :
 
-(c = -4)<img src="result/skeleton_orig/center_neg_4/A20skeleton_orig.bmp" width="40%">  (c = -8)<img src="result/skeleton_orig/center_neg_8/A20skeleton_orig.bmp" width="40%">
+(c = 4)<img src="result/skeleton_orig/center_neg_4/A20skeleton_orig.bmp" width="40%">  (c = 8)<img src="result/skeleton_orig/center_neg_8/A20skeleton_orig.bmp" width="40%">
 
 
 <div style="break-after: page; page-break-after: always;"></div>
