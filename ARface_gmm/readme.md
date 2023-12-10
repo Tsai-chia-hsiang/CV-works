@@ -13,7 +13,11 @@ $(\alpha_b^{k},\mu_b^{k}, \Sigma_{b}^{k}), b\in\{1, 2, ... \text{number of peopl
 **number of people = 10
 
 ## Testing :
-for each sample $\sum_{i=1}^{K}\alpha_b^i \times \text{gaussianPDF}(x_s|\mu_b^i, \Sigma_b^i)$
+for each sample $s,$
+
+$$\displaystyle\sum_{c=R,G,B}g_{x,c}^2$$
+
+$$\sum_{i=1}^{K}\alpha_b^i \times \text{gaussianPDF}(x_s|\mu_b^i, \Sigma_b^i)$$
 
 and the prediction class(person) of the sample $s$ is 
 
