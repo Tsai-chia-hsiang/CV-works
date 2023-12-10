@@ -42,8 +42,11 @@ arguments:
 - --detail_log:
   - training log for each class in one experiment
   - default = False
-
-e.g : ```python gmm.py --repeate 5 --k 2 --max_train_iter 100```
+- --saveto
+  - the directory for saving parameters of the model
+  - default : ```./model/```
+  
+e.g : ```python gmm.py --repeate 5 --k 2 --max_train_iter 100 --saveto ./model_v1/```
 
 ## Experiment result:
 ```python .\gmm.py --repeate 5 --k 2 --max_train_iter 800```
