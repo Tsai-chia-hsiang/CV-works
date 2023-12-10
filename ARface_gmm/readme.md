@@ -6,18 +6,18 @@
 ## Training :
 Appling GMM (E step and M step) for each person to get the parameters:
 
-$(\alpha_b^{k},\mu_b^{k}, \Sigma_{b}^{k}), b\in\{1, 2, ... \text{\#Person}\}; k\in\{1, 2, ..., K\}$ 
+$(\alpha_b^{k},\mu_b^{k}, \Sigma_{b}^{k}), b\in\{1, 2, ... \text{number of people}\}; k\in\{1, 2, ..., K\}$ 
 
 **K : number for gaussian component.
 
-** #Person = 10
+**number of people = 10
 
 ## Testing :
 for each sample $s,$
 
 $\text{score}_b^{s} = \displaystyle\sum_{i=1}^{K}\alpha_b^i\times\text{gaussianPDF}(x_s|\mu_b^i, \Sigma_b^i)$
 
-and the prediction class(person) of the sample $s$ is $\hat{b}^s = \mathop{\arg\max}\limits_{b}(\text{score}^s_b), b\in \{1, 2, ... \text{\#Person}=10\}$ 
+and the prediction class(person) of the sample $s$ is $\hat{b}^s = \mathop{\arg\max}\limits_{b}(\text{score}^s_b), b\in \{1, 2, ... \text{number of people}\}$ 
 
 
 ## To run the code:
