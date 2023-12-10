@@ -11,6 +11,7 @@ parser.add_argument("--k",help="the component of GMM for each class", type=int, 
 parser.add_argument("--detail_log",help="training log for each class in one experiment", type=bool, default=False)
 parser.add_argument("--repeate",help="the number for repeating the experiment", type=int, default=1)
 parser.add_argument("--dataroot",help="the directory of data", default=osp.join("CSVdata"))
+parser.add_argument("--saveto",help="the directory for saving parameters of the model", default=osp.join("model"))
 args = parser.parse_args()
 
 def getdata(root:os.PathLike)->dict:
@@ -170,6 +171,7 @@ def main():
     data,classes = getdata(root=args.dataroot)
     acc_list = []
     acc_best = 0.0
+
     for _ in range(args.repeate):
         
         gmm = Labeled_GMM(num_classes=len(classes), k=args.k)
@@ -183,7 +185,7 @@ def main():
         acc = np.mean((predict == data['test']['label']).astype(np.float32))
         if acc > acc_best:
             acc_best = acc
-            gmm.save(saveroot=osp.join("model"))
+            gmm.save(saveroot=args.saveto)
         print(f"accuracy : {acc:.3f}")
         acc_list.append(acc)
     print(f"mean accuracy over {args.repeate} times experiments : {np.mean(acc_list):.3f}")
