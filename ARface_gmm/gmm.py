@@ -3,6 +3,7 @@ import os.path as osp
 import argparse
 import numpy as np
 from tqdm import tqdm
+import json
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--max_train_iter",help="maximum of training iteration", type=int, default=100)
@@ -121,7 +122,7 @@ class Labeled_GMM():
                 self.cov[ci][ki] = shift.T@(cluster_pdf*shift)/pdf_summa
             
             self.alpha[ci] = np.mean(pdf, axis=0, keepdims=True)
-           
+
     def predict(self, x:np.ndarray)->np.ndarray:
         score = np.hstack(
             [np.sum(self.__weighted_pdf_k_compoment(x=x, ci=ci), axis=1).reshape(-1, 1) 
@@ -130,10 +131,46 @@ class Labeled_GMM():
         l = np.argmax(score, axis=1)
         return l
 
+    def save(self, saveroot:os.PathLike)->None:
+        
+        if not osp.exists(saveroot):
+            os.mkdir(saveroot)
+        
+        with open(osp.join(saveroot, "properties.json"),"w+", encoding="utf-8") as jf:
+            json.dump(
+                {'k':self.k, 'num_class':self.num_classes}, 
+                jf, ensure_ascii=False, indent=4
+            )
+            np.save(osp.join(saveroot, "mean"),np.array(self.mean, dtype=np.object_),allow_pickle=True)
+            np.save(osp.join(saveroot, "cov"),np.array(self.cov, dtype=np.object_),allow_pickle=True)
+            np.save(osp.join(saveroot, "alpha"),np.array(self.alpha, dtype=np.object_),allow_pickle=True)
+
+    def load(self, saveroot:os.PathLike)->None:
+        m = np.load(osp.join(saveroot, "mean.npy"), allow_pickle=True)
+        cov = np.load(osp.join(saveroot, "cov.npy"), allow_pickle=True)
+        a = np.load(osp.join(saveroot, "alpha.npy"), allow_pickle=True)
+
+        for ci in range(self.num_classes):
+            for ki in range(self.k):
+                self.mean[ci][ki] = m[ci][ki].astype(np.float64)
+                self.cov[ci][ki] = cov[ci][ki].astype(np.float64)
+            self.alpha[ci] = a[ci].astype(np.float64)
+
+
+def load_pretrained_parameters(saveroot:os.PathLike)->Labeled_GMM:
+    modelprperty = {}
+    with open(osp.join(saveroot, "properties.json")) as p:
+        modelprperty = json.load(p)
+    gmm = Labeled_GMM(num_classes=modelprperty['num_class'], k=modelprperty['k'])
+    gmm.load(saveroot=osp.join(saveroot))
+    return gmm
+
+
 def main():
 
     data,classes = getdata(root=args.dataroot)
-    acc_list =[]
+    acc_list = []
+    acc_best = 0.0
     for _ in range(args.repeate):
         
         gmm = Labeled_GMM(num_classes=len(classes), k=args.k)
@@ -145,11 +182,19 @@ def main():
 
         predict = gmm.predict(x=data['test']['data'])
         acc = np.mean((predict == data['test']['label']).astype(np.float32))
+        if acc > acc_best:
+            acc_best = acc
+            gmm.save(saveroot=osp.join("model"))
         print(f"accuracy : {acc:.3f}")
         acc_list.append(acc)
-
     print(f"mean accuracy over {args.repeate} times experiments : {np.mean(acc_list):.3f}")
+   
 
 if __name__ == "__main__":
 
     main()
+    #data,classes = getdata(root=args.dataroot)
+    #gmm = load_pretrained_parameters(osp.join("bestmodel"))
+    #predict = gmm.predict(x=data['test']['data'])
+    #acc = np.mean((predict == data['test']['label']).astype(np.float32))
+    #print(acc)
