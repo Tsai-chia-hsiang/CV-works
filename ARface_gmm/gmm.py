@@ -109,12 +109,14 @@ class Labeled_GMM():
             pbar = tqdm(pbar)
 
         for _ in pbar:
-
+            
+            # E step
             pdf = self.__weighted_pdf_k_compoment(x=x, ci=ci)
             pdf = pdf/(np.sum(pdf, axis=1).reshape(-1,1))
 
             pdf_summa = np.sum(pdf, axis=0)
             
+            #M step
             self.alpha[ci] = pdf_summa.reshape(1, -1)/pdf.shape[0]
             mu = pdf.T@x
             
