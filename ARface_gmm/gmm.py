@@ -40,10 +40,10 @@ def covariance_matrix(x:np.ndarray)->np.ndarray:
 def gaussian_pdf(x:np.ndarray, mean:np.ndarray, cov:np.ndarray, perturbation:bool=False)->np.ndarray:
         
     def d_mahalanobis(x:np.ndarray, mean:np.ndarray, invcov:np.ndarray):
-        shift = x - mean.reshape(1, -1)
+        shift = x - mean
         return np.sum((shift@invcov)*shift, axis=1)
         
-    pcov = cov if not perturbation else cov+np.eye(cov.shape[0])*3000000
+    pcov = cov if not perturbation else cov+np.eye(cov.shape[0])*(3e6)
     score = np.exp(-0.5*d_mahalanobis(x, mean=mean, invcov=np.linalg.inv(pcov)))
     normalze = (((2*np.pi)**x.shape[1]) * (np.linalg.det(pcov)))**0.5
 
