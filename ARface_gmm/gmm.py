@@ -33,13 +33,13 @@ def getdata(root:os.PathLike)->dict:
     return data, classes
 
 def covariance_matrix(x:np.ndarray)->np.ndarray:
-    shift = x - np.repeat(np.mean(x, axis=0, keepdims=True), x.shape[0], axis=0)
+    shift = x - np.mean(x, axis=0, keepdims=True)
     return (shift.T@shift)/(x.shape[0]-1)
 
 def gaussian_pdf(x:np.ndarray, mean:np.ndarray, cov:np.ndarray, perturbation:bool=False)->np.ndarray:
         
     def d_mahalanobis(x:np.ndarray, mean:np.ndarray, invcov:np.ndarray):
-        shift = x - np.repeat(mean.reshape(1, -1), x.shape[0], axis=0)
+        shift = x - mean.reshape(1, -1)
         return np.sum((shift@invcov)*shift, axis=1)
         
     pcov = cov if not perturbation else cov+np.eye(cov.shape[0])*3000000
@@ -75,8 +75,8 @@ class Labeled_GMM():
             )
 
     def __inital_parameters(self, x:np.ndarray, ci:int)->None:
-
-        random_sample_idx = np.random.choice(np.arange(x.shape[0]), self.k, replace=False)
+        #random_sample_idx = np.arange(0, self.k)
+        random_sample_idx =  np.random.choice(np.arange(x.shape[0]), self.k, replace=False)
         covx = covariance_matrix(x)
 
         for idx, ki in zip(random_sample_idx, range(self.k)):
@@ -88,13 +88,13 @@ class Labeled_GMM():
     def __weighted_pdf_k_compoment(self, x:np.ndarray, ci:int)->np.ndarray:
     
         pdf = np.hstack(
-                [
-                    gaussian_pdf(
-                        x=x, mean=self.mean[ci][ki], cov=self.cov[ci][ki],
-                        perturbation=True
-                    ).reshape(-1, 1) for ki in range(self.k)
-                ]
-            )
+            [
+                gaussian_pdf(
+                    x=x, mean=self.mean[ci][ki], cov=self.cov[ci][ki],
+                    perturbation=True
+                ).reshape(-1, 1) for ki in range(self.k)
+            ]
+        )
 
         pdf = self.alpha[ci]*pdf
         return pdf
@@ -102,6 +102,7 @@ class Labeled_GMM():
     def __trian_one_class_gmm_model(self, x:np.ndarray, ci:int, max_iter:int=200, train_log:bool=True)->None:
         
         self.__inital_parameters(x, ci)
+
         pbar = range(max_iter)
         if train_log:
             pbar = tqdm(pbar)
@@ -110,19 +111,17 @@ class Labeled_GMM():
 
             pdf = self.__weighted_pdf_k_compoment(x=x, ci=ci)
             pdf = pdf/(np.sum(pdf, axis=1).reshape(-1,1))
-      
-            for ki in range(self.k):
 
-                cluster_pdf = pdf[:, ki].reshape(-1,1)
-                pdf_summa = np.sum(cluster_pdf)
-                
-                self.mean[ci][ki] = np.sum(cluster_pdf*x,axis=0, keepdims=True)/pdf_summa
-   
-                shift = x - np.repeat(self.mean[ci][ki], x.shape[0] ,axis=0)
-                self.cov[ci][ki] = shift.T@(cluster_pdf*shift)/pdf_summa
+            pdf_summa = np.sum(pdf, axis=0)
             
-            self.alpha[ci] = np.mean(pdf, axis=0, keepdims=True)
-
+            self.alpha[ci] = pdf_summa.reshape(1, -1)/pdf.shape[0]
+            mu = pdf.T@x
+            
+            for ki in range(self.k):   
+                self.mean[ci][ki] = mu[ki:ki+1, :]/pdf_summa[ki]
+                shift = x - self.mean[ci][ki]
+                self.cov[ci][ki] = shift.T@(pdf[:, ki:ki+1]*shift)/pdf_summa[ki]
+            
     def predict(self, x:np.ndarray)->np.ndarray:
         score = np.hstack(
             [np.sum(self.__weighted_pdf_k_compoment(x=x, ci=ci), axis=1).reshape(-1, 1) 
