@@ -5,10 +5,10 @@ import numpy as np
 from tqdm import tqdm
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--max_train_iter",help=" maximum of training iteration", type=int, default=100)
-parser.add_argument("--k",help=" the component of GMM for each class", default=2)
-parser.add_argument("--detail_log",help=" training log for each class in one experiment", type=bool, default=False)
-parser.add_argument("--repeate",help=" the number for repeating the experiment", type=int, default=1)
+parser.add_argument("--max_train_iter",help="maximum of training iteration", type=int, default=100)
+parser.add_argument("--k",help="the component of GMM for each class", type=int, default=2)
+parser.add_argument("--detail_log",help="training log for each class in one experiment", type=bool, default=False)
+parser.add_argument("--repeate",help="the number for repeating the experiment", type=int, default=1)
 parser.add_argument("--dataroot",help="the directory of data", default=osp.join("CSVdata"))
 args = parser.parse_args()
 
