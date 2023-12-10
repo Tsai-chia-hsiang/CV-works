@@ -17,7 +17,7 @@ for one sample $x_j$
 
 $$s_b^{x_j}=\displaystyle\sum_{i=1}^{K} P(b|x_j,\mu_b^i, \Sigma_b^i)$$
 
-$P(b|x_j,\mu_b^i, \Sigma_b^i)=\alpha_b^i\times N(x_j|\mu_b^i, \Sigma_b^i)$
+$$P(b|x_j,\mu_b^i, \Sigma_b^i)=\alpha_b^i\times N(x_j|\mu_b^i, \Sigma_b^i)$$
 
 and the prediction class(person) of the sample $s$ is 
 
