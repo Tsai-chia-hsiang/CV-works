@@ -46,6 +46,10 @@ arguments:
 e.g : ```python gmm.py --repeate 5 --k 2 --max_train_iter 100```
 
 ## Experiment result:
-```python gmm.py --repeate 5 --k 2 --max_train_iter 100```
+```python .\gmm.py --repeate 5 --k 2 --max_train_iter 800```
 
-Average accuracy : 0.78 ~ 0.823
+best accuracy : 0.85384613
+
+- parameters : save at ```./bestmodel/```
+  - Using ```np.load(osp.join("./bestmodel", "para.npy"), allow_pickle=True)``` to read.
+  - Can use ```load_pretrained_parameters()``` to get the gmm model with the pretrained parameters.
