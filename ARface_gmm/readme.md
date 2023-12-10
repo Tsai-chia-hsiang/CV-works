@@ -15,7 +15,9 @@ $(\alpha_b^{k},\mu_b^{k}, \Sigma_{b}^{k}), b\in\{1, 2, ... \text{number of peopl
 ## Testing :
 for one sample $x_j$
 
-$$s_b^{x_j}=\displaystyle\sum_{i=1}^{K}\alpha_b^i \times \text{gaussianPDF}(x_j|\mu_b^i, \Sigma_b^i)$$
+$$s_b^{x_j}=\displaystyle\sum_{i=1}^{K} P(b|x_j,\mu_b^i, \Sigma_b^i)$$
+
+$P(b|x_j,\mu_b^i, \Sigma_b^i)=\alpha_b^i\times N(x_j|\mu_b^i, \Sigma_b^i)$
 
 and the prediction class(person) of the sample $s$ is 
 
